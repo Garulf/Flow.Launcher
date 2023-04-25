@@ -1,13 +1,6 @@
 import sys
 
-EMPTY_LOG = """```shell
-
-Replace this line with the important log contents.
-
-```
-</details>
-
-<!-- # Or drag and drop the log file and delete the above detail part. -->"""
+EMPTY_LOG = "Replace this line with the important log contents."
 
 
 def missing_log(body: str):
