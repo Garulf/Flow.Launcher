@@ -28,5 +28,5 @@ jobs:
                 issue_number: context.issue.number,
                 owner: "github-actions[bot]",
                 repo: context.repo.repo,
-                body: ${{ steps.run-bot.outputs.response }}
+                body: ${{ steps.run-bot.outputs }}
             })
