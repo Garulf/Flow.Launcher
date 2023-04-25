@@ -26,7 +26,7 @@ jobs:
           script: |
             github.issues.createComment({
                 issue_number: context.issue.number,
-                owner: "github-actions[bot]",
+                owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: ${{ steps.run-bot.outputs }}
+                body: "${{ steps.run-bot.outputs }}"
             })
