@@ -18,7 +18,7 @@ jobs:
         id: run-bot
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python ./ci/bot.py '${{ github.event.issue.body }}'
+        run: python ./ci/issue_bot.py '${{ github.event.issue.body }}'
       - name: Create issue comment using github bot as author
         uses: actions/github-script@v4
         with:
