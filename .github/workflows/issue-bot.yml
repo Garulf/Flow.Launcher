@@ -1,0 +1,32 @@
+name: Issue Bot
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run bot
+        id: run-bot
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python bot.py ${{ github.event.issue.body }}
+      - name: Create issue comment using github bot as author
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.issues.createComment({
+                issue_number: context.issue.number,
+                owner: "github-actions[bot]",
+                repo: context.repo.repo,
+                body: ${{ steps.run-bot.outputs.response }}
+            })
