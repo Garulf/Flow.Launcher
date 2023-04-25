@@ -1,18 +1,13 @@
 import sys
+import re
 from typing import Optional, Tuple
 
-EMPTY_LOG = """```shell
-
-Replace this line with the important log contents.
-
-```
-</details>
-
-<!-- # Or drag and drop the log file and delete the above detail part. -->"""
+EMPTY_LOG = r"\`\`\`shell.*Replace this line with the important log contents\..*\`\`\`.*</details>.*<!-- # Or drag and drop the log file and delete the above detail part. -->.*"
 
 
-def missing_log(body: str) -> Optional[Tuple[str, str]]:
-    if EMPTY_LOG in body:
+def missing_log(issue_body: str) -> Optional[Tuple[str, str]]:
+    match = re.search(EMPTY_LOG, issue_body, re.DOTALL)
+    if match:
         return "Missing log file", "Please provide a log file if possible as it will help us debug the issue."
     return None
 
@@ -30,6 +25,7 @@ def output_problem(problem: Optional[Tuple[str, str]]) -> None:
 
 def main():
     issue_body = sys.argv[1]
+    # print(issue_body)
     problems = []
     for check in CHECKS:
         result = check(issue_body)
@@ -41,7 +37,7 @@ def main():
         for problem in problems:
             output_problem(problem)
 
-        print("\nPlease fix the problems listed so we may help you better.")
+        print("\nPlease consider these recommendations so we may help you better.")
 
 
 if __name__ == "__main__":
