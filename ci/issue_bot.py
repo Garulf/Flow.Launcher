@@ -1,16 +1,31 @@
 import sys
+from typing import Optional, Tuple
 
-EMPTY_LOG = "Replace this line with the important log contents."
+EMPTY_LOG = """```shell
+
+Replace this line with the important log contents.
+
+```
+</details>
+
+<!-- # Or drag and drop the log file and delete the above detail part. -->"""
 
 
-def missing_log(body: str):
+def missing_log(body: str) -> Optional[Tuple[str, str]]:
     if EMPTY_LOG in body:
-        return "In order to help us debug your issue please provide a log file. Thank you!"
+        return "Missing log file", "Please provide a log file if possible as it will help us debug the issue."
+    return None
 
 
 CHECKS = [
     missing_log
 ]
+
+
+def output_problem(problem: Optional[Tuple[str, str]]) -> None:
+    if problem:
+        print(f"## {problem[0]}\n")
+        print(f"{problem[1]}\n")
 
 
 def main():
@@ -22,6 +37,11 @@ def main():
             problems.append(result)
 
     if problems:
-        print("The following problems were found:")
+        print("# The following problems were found:\n")
         for problem in problems:
-            print(f"* {problem}")
+            output_problem(problem)
+
+        print("\nPlease fix the problems listed so we may help you better.")
+
+if __name__ == "__main__":
+    main()
