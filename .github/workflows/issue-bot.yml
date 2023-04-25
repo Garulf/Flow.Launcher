@@ -18,7 +18,8 @@ jobs:
         id: run-bot
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python ./ci/issue_bot.py '${{ github.event.issue.body }}'
+        run: |
+          echo "MESSAGE=$(python ./ci/issue_bot.py '${{ github.event.issue.body }}'" >> "$GITHUB_OUTPUT"
       - name: Create issue comment using github bot as author
         uses: actions/github-script@v4
         with:
@@ -28,5 +29,5 @@ jobs:
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: "${{ steps.run-bot.outputs }}"
+                body: "${{ steps.run-bot.outputs.MESSAGE }}"
             })
